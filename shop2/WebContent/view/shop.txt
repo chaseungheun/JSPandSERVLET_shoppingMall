@@ -1,0 +1,101 @@
+멤버-회원가입/로그인/내정보수정/로그아웃/탈퇴
+
+판매자-상품등록/상품삭제/상품정보수정/내가올린 상품목록보기
+
+구매자-상품목록보기/구매/장바구니/상품검색
+
+create table shop_member(
+id 	 varchar2(20) primary key,
+pwd	 varchar2(20),
+name	 varchar2(20),
+email	 varchar2(50),
+addr	 varchar2(50),
+type 	 number	
+);
+
+외래키 삭제 방법 
+drop table  member   cascade constraints; 
+drop table  Customer   cascade constraints; 
+
+
+create table shop_product(
+num		 number primary key,
+name		 varchar2(500) not null,
+quantity	    number not null,
+price		 number not null, 
+img		 varchar2(500),
+content   	varchar2(500),
+s_id varchar2(20) references shop_member(id) on delete  cascade
+);
+
+create sequence seq_shop_product;
+
+create table shop_order(
+num		 number primary key,
+pro_num		 number references shop_product(num) on delete cascade,
+order_num	 number,
+total_price	 number,
+o_id		 varchar2(20) references shop_member(id) on delete cascade,
+o_date		 date,
+o_state		 number,
+d_state		 number
+);
+
+create sequence seq_shop_order;
+
+<class>
+
+Member
+String id/pwd/name/email/addr
+int type
+
+Dao 
+void insert(Member m);
+Member select(String id);
+void update(Member m);
+void delete(String id);
+
+Service
+void join(Member m);
+Member getMember(String id);
+void editMember(Member m);
+void remMember(String id);
+boolean login(String id, String pwd);
+
+Controller
+/member/form.do - /view/member/form.jsp
+/member/join.do - /member/loginForm.do
+/member/loginForm.do - /view/member/login.jsp 
+/member/login.do - /view/member/result.jsp---->내정보수정/로그아웃/탈퇴
+/member/logout.do - /member/loginForm.do
+/member/out.do - /member/loginForm.do
+/member/editForm.do - /view/member/editForm.jsp
+/member/edit.do - /view/member/result.jsp
+
+
+Product
+private int num		
+private String name		
+private int quantity	
+private int price		 
+private String img		
+private String content 	
+private String s_id
+
+이미지 저장위치
+C:\Users\KITRI\Desktop\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\webapps\product_img
+
+product패키지
+Dao
+void insert(Product p);
+ArrayList<Product> selectAllById(String s_id);
+
+Service
+add(Product p);
+ArrayList<Product> getProductsById(String s_id);
+
+
+
+
+
+
